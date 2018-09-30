@@ -77,3 +77,15 @@ heroku run /app/manage.py database create_tables
 ```sh
 heroku ps:scale worker=1
 ```
+
+## How to upgrade
+
+```sh
+heroku ps:scale web=0 worker=0
+heroku container:push --recursive
+heroku container:release web worker
+heroku run /app/manage.py db upgrade
+heroku ps:scale web=1 worker=1
+```
+
+See also https://redash.io/help/open-source/admin-guide/how-to-upgrade
