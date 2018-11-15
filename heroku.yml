@@ -1,0 +1,22 @@
+setup:
+  addons:
+    - plan: heroku-postgresql:hobby-dev
+    - plan: rediscloud:30
+    - plan: sendgrid:starter
+  config:
+    PYTHONUNBUFFERED: 0
+    QUEUES: queries,scheduled_queries,celery
+    # REDASH_COOKIE_SECRET: YOUR_SECRET_TOKEN
+    # REDASH_DATABASE_URL: YOUR_POSTGRES_URL
+    REDASH_LOG_LEVEL: INFO
+    # REDASH_REDIS_URL: YOUR_REDIS_URL
+    # REDASH_MAIL_PASSWORD: YOUR_ADDON_PASSWORD
+    REDASH_MAIL_PORT: 587
+    REDASH_MAIL_SERVER: smtp.sendgrid.net
+    # REDASH_MAIL_USERNAME: YOUR_ADDON_USERNAME
+    REDASH_MAIL_USE_TLS: true
+    # REDASH_MAIL_DEFAULT_SENDER: YOUR_MAIL_ADDRESS
+build:
+  docker:
+    web: Dockerfile.web
+    worker: Dockerfile.worker
