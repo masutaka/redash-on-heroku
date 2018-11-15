@@ -5,50 +5,38 @@ Dockerfiles for hosting redash on heroku
 ## How to deploy
 
 ```sh
-git clone git@github.com:willnet/redash-on-heroku.git
-cd redash-on-heroku
-heroku create your_app_name
-heroku container:push --recursive
+$ git clone git@github.com:willnet/redash-on-heroku.git
+$ cd redash-on-heroku
+
+$ heroku update beta
+$ heroku plugins:install @heroku-cli/plugin-manifest
+$ heroku create masutaka-redash-heroku-yml --manifest
+Reading heroku.yml manifest... done
+Creating ⬢ masutaka-redash-heroku-yml... done, stack is container
+Adding heroku-postgresql:hobby-dev... done
+Adding rediscloud:30... done
+Adding sendgrid:starter... done
+Setting config vars... done
+https://masutaka-redash-heroku-yml.herokuapp.com/ | https://git.heroku.com/masutaka-redash-heroku-yml.git
+$ git push heroku trial-heroku-yml:master
 ```
 
 ## How to setup
 
-### Add Addons
-
-Add following addons on heroku dashboard.
-
-- heroku postgres
-- Redis Cloud(or something)
-- sendgrid (or something)
-
-Choose redis addon allow more than or equal 30 connections. Otherwise you will get connection errors frequently.
-
-### Add environment variables
+### Add other environment variables
 
 Add environment variables like following.
 
 ```sh
-heroku config:set PYTHONUNBUFFERED=0
-heroku config:set QUEUES=queries,scheduled_queries,celery
 heroku config:set REDASH_COOKIE_SECRET=YOUR_SECRET_TOKEN
-heroku config:set REDASH_DATABASE_URL=YOUR_POSTGRES_URL
-heroku config:set REDASH_LOG_LEVEL=INFO
-heroku config:set REDASH_REDIS_URL=YOUR_REDIS_URL
-heroku config:set REDASH_MAIL_PASSWORD=YOUR_ADDON_PASSWORD
-heroku config:set REDASH_MAIL_PORT=587
-heroku config:set REDASH_MAIL_SERVER=YOUR_ADDON_DOMAIN
-heroku config:set REDASH_MAIL_USERNAME=YOUR_ADDON_USERNAME
-heroku config:set REDASH_MAIL_USE_TLS=true
+heroku config:set REDASH_DATABASE_URL=$(heroku config:get DATABASE_URL)
+heroku config:set REDASH_REDIS_URL=$(heroku config:get REDISCLOUD_URL)
+heroku config:set REDASH_MAIL_PASSWORD=$(heroku config:get SENDGRID_PASSWORD)
+heroku config:set REDASH_MAIL_USERNAME=$(heroku config:get SENDGRID_USERNAME)
 heroku config:set REDASH_MAIL_DEFAULT_SENDER=YOUR_MAIL_ADDRESS
 ```
 
 See also https://redash.io/help/open-source/setup#-setup
-
-### Release container
-
-```sh
-heroku container:release web worker
-```
 
 ### Create database
 
@@ -62,6 +50,15 @@ heroku run /app/manage.py database create_tables
 
 ```sh
 heroku ps:scale worker=1
+```
+
+## Switch back to the stable update stream
+
+You can switch back to the stable update stream and remove the plugin at any time:
+
+```sh
+$ heroku update stable
+$ heroku plugins:remove manifest
 ```
 
 ## How to upgrade
