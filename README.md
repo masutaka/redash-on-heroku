@@ -27,7 +27,7 @@ $ git push heroku trial-heroku-yml:master
 Add environment variables like following.
 
 ```sh
-$ heroku config:set REDASH_COOKIE_SECRET=YOUR_SECRET_TOKEN \
+$ heroku config:set REDASH_COOKIE_SECRET=YOUR_SECRET_TOKEN
 $ heroku config:set REDASH_DATABASE_URL=$(heroku config:get DATABASE_URL)
 $ heroku config:set REDASH_REDIS_URL=$(heroku config:get REDISCLOUD_URL)
 $ heroku config:set REDASH_MAIL_PASSWORD=$(heroku config:get SENDGRID_PASSWORD)
