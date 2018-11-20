@@ -30,6 +30,7 @@ Add environment variables like following.
 $ heroku config:set REDASH_COOKIE_SECRET=YOUR_SECRET_TOKEN
 $ heroku config:set REDASH_DATABASE_URL=$(heroku config:get DATABASE_URL)
 $ heroku config:set REDASH_REDIS_URL=$(heroku config:get REDISCLOUD_URL)
+$ heroku config:set REDASH_HOST=YOUR_DOMAIN_URL
 $ heroku config:set REDASH_MAIL_PASSWORD=$(heroku config:get SENDGRID_PASSWORD)
 $ heroku config:set REDASH_MAIL_USERNAME=$(heroku config:get SENDGRID_USERNAME)
 $ heroku config:set REDASH_MAIL_DEFAULT_SENDER=YOUR_MAIL_ADDRESS
